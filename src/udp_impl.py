@@ -7,9 +7,9 @@ class UDP_Client:
   def __init__(self, server_name:str, server_port:int):
     self.server_name = server_name
     self.server_port = server_port
-    self.client_socket: socket = socket(AF_INET, SOCK_DGRAM)
+    self.client_socket = socket(AF_INET, SOCK_DGRAM)
 
-  def send_request(self, request):
+  def send_udp_request(self, request):
     self.client_socket.sendto(request, (self.server_name, self.server_port))
     response, _ = self.client_socket.recvfrom(1024)
     return response
@@ -25,7 +25,10 @@ class UDP_Client:
     return res_type, identifier, response_data.decode('utf-8')
 
   def execute_method(self, method_number):
-    identifier = 5632  # Gerar um identificador único para a requisição
+    identifier = int(input("Identificador (entre 1 e 65535): "))
+    if identifier < 1 or identifier > 65535:
+        print("Identificador inválido. Por favor, escolha um número entre 1 e 65535.")
+        exit()
 
     if method_number == 1:
       request = self.format_request(0b0000, identifier)
@@ -37,7 +40,7 @@ class UDP_Client:
       raise ValueError("Número de método inválido para UDP_Server")
 
     try:
-      response = self.send_request(request)
+      response = self.send_udp_request(request)
       res_type, identifier, data = self.parse_response(response)
       print("Resposta recebida:")
       print(data)
