@@ -34,16 +34,18 @@ while True:
   try:
     factory = ServerFactory()
     menuMsg()
-    protocolo = input("Digite o protocolo (UDP ou TCP): ").upper()
+    protocolo = input("Digite o protocolo (UDP ou RAW): ").upper()
     opcao = int(input("Digite o número do método (1, 2 ou 3): "))
+  
     if opcao == 4:
       print("Encerrando...")
+      server.close()
       break
-    # time.sleep(1)
-    # os.system("clear")
+
     server = factory.create_server(protocolo)
     server.execute_method(opcao)
-    server.close()
+    # time.sleep(3)
+    # os.system("clear") # Unix -> clear, Windows -> cls
   
   except ValueError as e:
     print(colored(("Erro:", e), "red"))
