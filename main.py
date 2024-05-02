@@ -39,9 +39,9 @@ while True:
     factory = ServerFactory()
     menuMsg()
 
-    protocolo = input("Digite o protocolo (UDP ou RAW): ").upper()
+    protocolo = "UDP" #input("Digite o protocolo (UDP ou RAW): ").upper()
     opcao = int(input("Digite o número do método (1, 2 ou 3): "))
-    identificador = int(input("Digite um identificador (entre 1 e 65535): "))
+    identificador = 65534
     if identificador < 1 or identificador > 65535:
       print("Identificador inválido. Por favor, escolha um número entre 1 e 65535.")
 

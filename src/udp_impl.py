@@ -10,10 +10,15 @@ class UDP_Client:
     self.identificador = identificador
     self.client_socket = socket(AF_INET, SOCK_DGRAM)
 
+  # def f_avancar():
+  #   avancar = input("Pressione ENTER para continuar...")
+  #   if not avancar: 
+  #     limpar_tela()
+
   def send_udp_request(self, request:bytes) -> bytes:
     """Envia requisição para o servidor"""
     self.client_socket.sendto(request, (self.server_name, self.server_port))
-    response, _ = self.client_socket.recvfrom(1024)
+    response, _ = self.client_socket.recvfrom(80000)
     return response
 
   def format_request(self, req_type:bytes, identifier:int) -> bytes:
@@ -25,7 +30,7 @@ class UDP_Client:
     identifier = (response[0] & 0x0F) << 8 | response[1]
     response_size = response[2]
     response_data = response[3:3+response_size]
-    return res_type, identifier, response_data.decode('utf-8')
+    return res_type, identifier, response_data.decode('utf-8', errors='ignore')
 
   def execute_method(self, opcao:int) -> None:
     """Executa um dos métodos do servidor dada a opção escolhida pelo usuário e exibe a resposta"""
@@ -45,11 +50,10 @@ class UDP_Client:
       print(colored("\nResposta recebida!", "green"))
       print(f"{tipo_msg[opcao]}: {data}")
 
-      avancar = input("Pressione ENTER para continuar...")
-      if not avancar: 
-        limpar_tela()
+      # self.f_avancar()
     except Exception as e:
       print(colored(("Erro ao enviar/receber dados:", e),"red"))
+      # self.f_avancar()
 
   def close(self):
     """Fecha a conexão do cliente"""
