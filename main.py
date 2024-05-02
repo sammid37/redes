@@ -1,6 +1,6 @@
 # Redes de Computadores I 
 # Projeto Final - Arquivo Principal
-# Christopher A. T, Samantha D. M. e ??? 
+# Christopher A. T, Samantha D. M. e Enthony Miguel
 # Maio de 2024
 
 import os
@@ -35,7 +35,7 @@ def menuMsg() -> None:
 
 while True:
   try:
-    limpar_tela()
+    # limpar_tela()
     factory = ServerFactory()
     menuMsg()
 

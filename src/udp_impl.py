@@ -16,7 +16,7 @@ class UDP_Client:
     response, _ = self.client_socket.recvfrom(1024)
     return response
 
-  def format_request(self, req_type:int, identifier:int) -> bytes:
+  def format_request(self, req_type:bytes, identifier:int) -> bytes:
     """Formata a requisição em Bytes"""
     return bytes([0b0000 << 4 | req_type, identifier >> 8, identifier & 0xFF])
 
@@ -41,9 +41,9 @@ class UDP_Client:
     try:
       response = self.send_udp_request(request)
       res_type, idt, data = self.parse_response(response)
-      tipo_msg = ["Data e hora", "Frase motivacional", "Nº de requisições atendidas"]
+      tipo_msg = ["","Data e hora", "Frase motivacional", "Nº de requisições atendidas"]
       print(colored("\nResposta recebida!", "green"))
-      print(f"{tipo_msg[idt]}: {data}")
+      print(f"{tipo_msg[opcao]}: {data}")
 
       avancar = input("Pressione ENTER para continuar...")
       if not avancar: 
