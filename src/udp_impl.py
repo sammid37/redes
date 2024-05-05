@@ -25,53 +25,27 @@ class UDP_Client:
     """Formata a requisição em Bytes"""
     return bytes([0b0000 << 4 | req_type, identifier >> 8, identifier & 0xFF])
 
-  # def parse_response(self, response:bytes):
-  #   res_type = response[0] >> 4 # Desloca 4 bits para a direita
-  #   identifier = (response[0] & 0x0F) << 8 | response[1]
-  #   response_size = response[2]
-  #   response_data = response[3:3+response_size]
-  #   print(response)
-  #   return res_type, identifier, response_data.decode('utf-8')
-
-  # def parse_response(self, response:bytes):
-  #   res_type = response[0] >> 4  # Desloca 4 bits para a direita para o tipo de resposta
-  #   identifier = (response[0] & 0x0F) << 8 | response[1]  # Combina partes do identificador
-  #   response_size = response[2]  # Tamanho dos dados de resposta
-  #   response_data = response[3:3+response_size]  # Dados da resposta
-  #   print(response)
-  #   print(res_type)
-  #   print(identifier)
-  #   print(response_size)
-  #   print(response_data)
-  #   # Checa se os dados contêm apenas bytes numéricos (0-9)
-  #   if all(48 <= byte <= 57 for byte in response_data[:-1]):  # Ignora o último caractere '%'
-  #       # Converte os bytes numéricos para int, então para string
-  #       data_string = str(int.from_bytes(response_data[:-1], byteorder='big'))
-  #   else:
-  #       # Decodifica como string UTF-8
-  #       data_string = response_data.decode('utf-8', errors='replace')
-
-  #   return res_type, identifier, data_string
-  
   def parse_response(self, response:bytes):
-    res_type = response[0] >> 4
-    identifier = (response[0] & 0x0F) << 8 | response[1]
-    response_size = response[2]
-    response_data = response[3:3+response_size]
+    res_req = response[0] >> 4
+    res_type = response[0] & 0x0F
+    identifier = (response[1] << 8) | response[2]
+    response_size = response[3]
 
-    print(res_type)
-    print(identifier)
-    print(response_size)
-    print(response_data)
-
-    # Assume que os dados são um inteiro de 32 bits
-    if response_size == 4:
-        number_of_requests = int.from_bytes(response_data, byteorder='big')
-        data_string = str(number_of_requests)
+    if res_req == 1:  # Verifica se é uma resposta (bits 0001)
+      if res_type == 0:  # Requisição de data e hora
+        response_data = response[4:].decode('utf-8')
+      elif res_type == 1:  # Requisição de frase motivacional
+        response_data = response[4:].decode('utf-8')
+      elif res_type == 2:  # Requisição de número de respostas
+        response_data = int.from_bytes(response[4:], byteorder='big', signed=False)
+      elif res_type == 3:  # Requisição inválida
+        response_data = "Requisição inválida"
+      else:
+        response_data = "Tipo de resposta desconhecido"
     else:
-        data_string = response_data.decode('utf-8', errors='replace')
+      response_data = "Não é uma resposta válida"
 
-    return res_type, identifier, data_string
+    return res_type, identifier, response_data
 
   def execute_method(self, opcao:int) -> None:
     """Executa um dos métodos do servidor dada a opção escolhida pelo usuário e exibe a resposta"""
@@ -86,7 +60,9 @@ class UDP_Client:
 
     try:
       response = self.send_udp_request(request)
+
       res_type, idt, data = self.parse_response(response)
+      
       tipo_msg = ["","Data e hora", "Frase motivacional", "Nº de requisições atendidas"]
       print(colored("\nResposta recebida!", "green"))
       print(f"{tipo_msg[opcao]}: {data}")
