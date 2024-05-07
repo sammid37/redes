@@ -11,18 +11,15 @@ sys.path.append('src')
 from utils import limpar_tela
 from termcolor import colored
 from udp_impl import UDP_Client
-# from raw_impl import RAW_Client
-
-SERVER_NAME = "15.228.191.109"
-SERVER_PORT = 50000
+from udp_raw_impl import UDP_RAW_Client
+from constantes import SERVER_NAME, SERVER_PORT
 
 class ServerFactory:
   def create_server(self, protocolo, identificador):
     if protocolo == "UDP":
       return UDP_Client(SERVER_NAME,SERVER_PORT, identificador)
     elif protocolo == "RAW":
-      # return RAW_Server()
-      pass
+      return UDP_RAW_Client(SERVER_NAME, SERVER_PORT, identificador)
     else:
       raise ValueError("Protocolo não suportado")
 

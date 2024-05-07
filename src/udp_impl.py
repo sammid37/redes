@@ -2,13 +2,15 @@ import time
 from utils import limpar_tela
 from termcolor import colored
 from socket import socket, AF_INET, SOCK_DGRAM
+from constantes import SERVER_NAME, SERVER_PORT
 
 class UDP_Client:
-  def __init__(self, server_name:str, server_port:int, identificador:int):
+  def __init__(self, server_name:str, server_port:int, identificador:int) -> None:
     self.server_name = server_name
     self.server_port = server_port
     self.identificador = identificador
     self.client_socket = socket(AF_INET, SOCK_DGRAM)
+    self.client_socket.connect(SERVER_NAME, SERVER_PORT)
 
   # def f_avancar():
   #   avancar = input("Pressione ENTER para continuar...")
@@ -62,7 +64,7 @@ class UDP_Client:
       response = self.send_udp_request(request)
 
       res_type, idt, data = self.parse_response(response)
-      
+
       tipo_msg = ["","Data e hora", "Frase motivacional", "Nº de requisições atendidas"]
       print(colored("\nResposta recebida!", "green"))
       print(f"{tipo_msg[opcao]}: {data}")
