@@ -10,7 +10,6 @@ class UDP_Client:
     self.server_port = server_port
     self.identificador = identificador
     self.client_socket = socket(AF_INET, SOCK_DGRAM)
-    self.client_socket.connect(SERVER_NAME, SERVER_PORT)
 
   # def f_avancar():
   #   avancar = input("Pressione ENTER para continuar...")
