@@ -2,6 +2,8 @@
 
 O seguinte repositório contém o projeto final da disciplina de Redes de Computadores.
 
+> Implementado por Chirstopher, Enthony e Samantha.
+
 ## Dependências e execução
 
 O projeto foi desenvolvido em Python 3.10.x.
@@ -18,7 +20,13 @@ Feito isso, execute o comando abaixo na pasta raiz do projeto.
 python main.py
 ```
 
+> Considerações: em caso de execuções via IDE ou terminal, lembre-se de executar no modo de administrador.
+
 Agora o usuário pode informar um nome d protocolo implementado no terminal e solicitar uma das 3 opções de requisição.
+
+![alt text](image.png)
+
+Todas as informações necessárias sobre o desenvolvimento estão comentadas ao longo do código.
 
 ### Considerações sobre o desenvolimento
 
